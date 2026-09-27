@@ -1,0 +1,308 @@
+<!-- PAT WORKSPACE — trang cổng (portal). v4 — 27/09/2026: theo ảnh phong cảnh xanh lá -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAT WORKSPACE</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2f9e64">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    --bg-a: #eaf6ee;
+    --bg-b: #d7ecdd;
+    --ink: #1c2b22;
+    --ink-soft: #55665a;
+    --accent: #2f9e64;
+    --accent-deep: #1f7a4d;
+    --card-bg: #ffffff;
+    --card-shadow: 0 14px 34px rgba(24, 63, 40, 0.10);
+    --radius-lg: 20px;
+  }
+  *{ box-sizing: border-box; }
+  html, body{
+    margin: 0; padding: 0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+  }
+
+  @keyframes fadeUp{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform: translateY(0);} }
+  @keyframes floaty{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-8px);} }
+  @keyframes leafSway{ 0%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(2.5deg);} }
+  @keyframes shimmer{ 0%{ background-position: -200px 0;} 100%{ background-position: 200px 0;} }
+
+  /* ================= SCENE (nền phong cảnh) ================= */
+  .scene{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 55%, var(--bg-a) 100%);
+    min-height: 100vh;
+    padding: 46px 5vw 60px;
+  }
+  .scene-bg{ position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .scene-content{ position: relative; z-index: 2; max-width: 1300px; margin: 0 auto; }
+
+  /* ================= HEADER ================= */
+  .brand{
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp .7s ease .05s forwards;
+  }
+  .brand-ring{
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-ring svg{ width: 26px; height: 26px; color: var(--accent); }
+  .brand-text{ font-size: 21px; letter-spacing: .5px; }
+  .brand-text b{ font-weight: 800; }
+  .brand-text span{ font-weight: 400; color: #2c3b31; }
+
+  .hero-title{
+    font-size: 19px; line-height: 1.62; color: #33463c; max-width: 560px;
+    margin: 0 0 22px;
+    opacity: 0; animation: fadeUp .7s ease .16s forwards;
+  }
+  .hero-checks{
+    display: flex; flex-wrap: wrap; gap: 12px 30px; margin-bottom: 54px;
+    opacity: 0; animation: fadeUp .7s ease .28s forwards;
+  }
+  .hero-check{ display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #33463c; }
+  .hero-check .dot{
+    width: 19px; height: 19px; border-radius: 50%; background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .hero-check .dot svg{ width: 10px; height: 10px; }
+
+  /* Cụm icon nổi góc phải: khung ứng dụng + icon bay quanh */
+  .float-cluster{
+    position: absolute; top: 70px; right: 6vw; z-index: 3;
+    opacity: 0; animation: fadeUp .8s ease .3s forwards;
+  }
+  @media (max-width: 980px){ .float-cluster{ display: none; } }
+  .app-mock{
+    width: 168px; height: 160px; border-radius: 18px; background: #ffffff;
+    box-shadow: 0 18px 36px rgba(24,63,40,.14);
+    padding: 14px; position: relative;
+    animation: floaty 4.5s ease-in-out infinite;
+  }
+  .app-mock .dots{ display: flex; gap: 4px; margin-bottom: 10px; }
+  .app-mock .dots span{ width: 5px; height: 5px; border-radius: 50%; background: #cfe0d5; display: block; }
+  .app-mock .tile{
+    width: 100%; height: 104px; border-radius: 12px; background: var(--accent);
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .app-mock .tile svg{ width: 42px; height: 42px; color: #fff; }
+  .app-mock .pencil{
+    position: absolute; right: -6px; bottom: -10px; width: 26px; height: 26px; color: #233a2e;
+    transform: rotate(6deg);
+  }
+  .float-icon{
+    position: absolute; width: 44px; height: 44px; border-radius: 12px; background: #fff;
+    box-shadow: 0 10px 20px rgba(24,63,40,.12);
+    display: flex; align-items: center; justify-content: center;
+    animation: floaty 4s ease-in-out infinite;
+  }
+  .float-icon svg{ width: 19px; height: 19px; color: var(--accent); }
+  .float-icon.i1{ top: -14px; right: -58px; animation-delay: .2s; }
+  .float-icon.i2{ top: 56px; right: -66px; animation-delay: .8s; }
+  .float-icon.i3{ top: 126px; right: -58px; animation-delay: 1.4s; }
+
+  .leaf-branch{ position: absolute; top: -18px; right: 0; width: 320px; opacity: .95; z-index: 1; animation: leafSway 6s ease-in-out infinite; transform-origin: top right; }
+  @media (max-width: 980px){ .leaf-branch{ display:none; } }
+  .leaf-corner{ position: absolute; left: -40px; bottom: -30px; width: 260px; opacity: .8; z-index: 1; }
+  @media (max-width: 700px){ .leaf-corner{ width: 160px; } }
+
+  /* ================= GRID ================= */
+  .apps-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; position: relative; z-index: 2; }
+  @media (max-width: 760px){ .apps-grid{ grid-template-columns: 1fr; } }
+
+  .app-card{
+    position: relative;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+    padding: 30px 30px 26px;
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
+    overflow: hidden;
+    opacity: 0; animation: fadeUp .7s ease forwards;
+  }
+  .app-card:nth-child(1){ animation-delay: .4s; }
+  .app-card:nth-child(2){ animation-delay: .5s; }
+  .app-card:hover{ transform: translateY(-5px); box-shadow: 0 22px 44px rgba(24,63,40,.16); }
+
+  .app-card-top{ display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
+  .app-icon{ width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .25s ease; }
+  .app-icon svg{ width: 25px; height: 25px; }
+  .app-card:hover .app-icon{ transform: scale(1.08) rotate(-3deg); }
+  .app-illustration{ width: 110px; height: 84px; flex-shrink: 0; }
+
+  .app-title{ font-size: 22px; font-weight: 800; margin: 0 0 9px; }
+  .app-desc{ font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 24px; flex-grow: 1; }
+
+  .app-btn{
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-deep) 100%);
+    color: #fff; font-size: 15px; font-weight: 700;
+    padding: 14px 20px; border-radius: 11px; width: 100%;
+    transition: filter .2s ease;
+  }
+  .app-btn svg{ width: 16px; height: 16px; transition: transform .25s ease; }
+  .app-card:hover .app-btn{ filter: brightness(1.06); }
+  .app-card:hover .app-btn svg{ transform: translateX(4px); }
+</style>
+</head>
+<body>
+
+<div class="scene">
+
+  <!-- Phong cảnh nền: núi, hồ phản chiếu, tháp, lá cây — vẽ bằng SVG nhẹ -->
+  <svg class="scene-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="1080" cy="230" r="70" fill="#fdeecb" opacity="0.55"/>
+    <path d="M700 430c150-70 260-70 420-10s330 20 480-40v250H700z" fill="#cfe7d7" opacity="0.55"/>
+    <path d="M600 480c200-60 340-30 520 10s330-10 480-60v270H600z" fill="#bfe0cc" opacity="0.55"/>
+    <path d="M0 560c260-40 420 10 640-20s420-40 620 10 220 10 340-20v370H0z" fill="#a9d6bb" opacity="0.55"/>
+    <!-- tháp cổ đơn giản -->
+    <g transform="translate(1180,470)" opacity="0.5" fill="#6f9c7e">
+      <rect x="-6" y="60" width="12" height="70"/>
+      <polygon points="-30,60 30,60 0,38"/>
+      <polygon points="-24,38 24,38 0,20"/>
+      <polygon points="-18,20 18,20 0,4"/>
+      <polygon points="-12,4 12,4 0,-10"/>
+    </g>
+    <!-- mặt hồ phản chiếu -->
+    <rect x="0" y="640" width="1600" height="260" fill="#dcefe1" opacity="0.6"/>
+    <path d="M700 700c150 30 260 30 420-6s330-10 480 20v40H700z" fill="#cfe7d7" opacity="0.35"/>
+    <!-- lá rơi rải rác -->
+    <g fill="#7fae8e" opacity="0.6">
+      <ellipse cx="1120" cy="330" rx="9" ry="5" transform="rotate(30 1120 330)"/>
+      <ellipse cx="1300" cy="260" rx="8" ry="4.5" transform="rotate(-20 1300 260)"/>
+      <ellipse cx="980" cy="380" rx="7" ry="4" transform="rotate(60 980 380)"/>
+      <ellipse cx="120" cy="760" rx="10" ry="5.5" transform="rotate(15 120 760)"/>
+      <ellipse cx="220" cy="820" rx="8" ry="4.5" transform="rotate(-30 220 820)"/>
+    </g>
+  </svg>
+
+  <!-- Cành lá góc trên phải -->
+  <svg class="leaf-branch" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M310 10C230 30 170 45 120 80" fill="none" stroke="#4c7a5a" stroke-width="4" stroke-linecap="round"/>
+    <g fill="#5f9e73">
+      <ellipse cx="270" cy="16" rx="20" ry="11" transform="rotate(-18 270 16)"/>
+      <ellipse cx="235" cy="30" rx="22" ry="12" transform="rotate(-10 235 30)"/>
+      <ellipse cx="198" cy="46" rx="24" ry="13" transform="rotate(-4 198 46)"/>
+      <ellipse cx="160" cy="62" rx="22" ry="12" transform="rotate(6 160 62)"/>
+      <ellipse cx="126" cy="80" rx="20" ry="11" transform="rotate(14 126 80)"/>
+    </g>
+    <g fill="#79b98c">
+      <ellipse cx="255" cy="40" rx="16" ry="9" transform="rotate(20 255 40)"/>
+      <ellipse cx="215" cy="60" rx="17" ry="9" transform="rotate(16 215 60)"/>
+      <ellipse cx="178" cy="78" rx="16" ry="9" transform="rotate(10 178 78)"/>
+    </g>
+  </svg>
+
+  <!-- Vệt lá mờ góc dưới trái -->
+  <svg class="leaf-corner" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="#8fc49f" opacity="0.55">
+      <ellipse cx="30" cy="170" rx="46" ry="24" transform="rotate(-20 30 170)"/>
+      <ellipse cx="70" cy="140" rx="40" ry="22" transform="rotate(-8 70 140)"/>
+      <ellipse cx="20" cy="110" rx="34" ry="18" transform="rotate(10 20 110)"/>
+    </g>
+  </svg>
+
+  <div class="scene-content">
+    <div class="brand">
+      <span class="brand-ring">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5c1 6.5-1 12-5.5 15.5-3 2.3-6.5 3-9.8 2.2-.6-.1-1-.7-.8-1.3C6.2 13.8 11.8 6.3 20.5 3.5z"/><path d="M5.4 20.3C9 14.8 13.6 10.4 19 7.4" fill="none" stroke="#eaf6ee" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-text"><b>PAT</b> <span>WORKSPACE</span></span>
+    </div>
+
+    <p class="hero-title">Chọn một phần mềm bên dưới để bắt đầu. Mỗi công cụ hoạt động độc lập ngay trên trình duyệt, không cần cài đặt.</p>
+
+    <div class="hero-checks">
+      <div class="hero-check"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>An toàn dữ liệu</div>
+      <div class="hero-check"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Nhanh chóng</div>
+      <div class="hero-check"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Dễ sử dụng</div>
+      <div class="hero-check"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Hoạt động độc lập</div>
+    </div>
+
+    <!-- Cụm icon nổi bên phải -->
+    <div class="float-cluster">
+      <div class="app-mock">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="tile">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.35-9.5-8.5C.7 9 2.4 5.8 5.6 5.3c1.8-.3 3.4.5 4.4 1.9C11 5.8 12.6 5 14.4 5.3c3.2.5 4.9 3.7 3.1 7.2C15 16.65 12 21 12 21z"/></svg>
+          <svg class="pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l3-1 11-11-2-2L4 18z"/></svg>
+        </div>
+      </div>
+      <span class="float-icon i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect></svg></span>
+      <span class="float-icon i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"></path><circle cx="18" cy="6" r="1.6" fill="currentColor" stroke="none"></circle></svg></span>
+      <span class="float-icon i3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"></line><line x1="4" y1="14" x2="20" y2="14"></line><line x1="4" y1="20" x2="14" y2="20"></line></svg></span>
+    </div>
+
+    <div class="apps-grid">
+
+      <a class="app-card" href="apps/chen-chu-ky-pdf.html">
+        <div class="app-card-top">
+          <span class="app-icon" style="background:#fbe4e2;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8.5 17l1-3.2 5-5 2.2 2.2-5 5-3.2 1z"></path></svg>
+          </span>
+          <svg class="app-illustration" viewBox="0 0 130 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="34" cy="60" r="34" fill="#fbe0dd"/>
+            <rect x="48" y="6" width="66" height="86" rx="6" fill="#ffffff" stroke="#f3ded9" stroke-width="1.5"/>
+            <text x="58" y="34" font-family="Arial, sans-serif" font-size="17" font-weight="800" fill="#c0392b">PDF</text>
+            <line x1="58" y1="46" x2="104" y2="46" stroke="#e4e4e4" stroke-width="3"/>
+            <line x1="58" y1="55" x2="104" y2="55" stroke="#e4e4e4" stroke-width="3"/>
+            <line x1="58" y1="64" x2="86" y2="64" stroke="#e4e4e4" stroke-width="3"/>
+            <rect x="52" y="70" width="52" height="20" rx="4" fill="#ffffff" stroke="#eee" stroke-width="1"/>
+            <path d="M58 84c4-9 8-9 10-3 2-6 6-6 9 1" fill="none" stroke="#233a2e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M86 72l7-7 5 5-7 7z" fill="#fff" stroke="#333" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <h2 class="app-title">Chèn chữ ký vào PDF</h2>
+        <p class="app-desc">Dán ảnh chữ ký vào đúng vị trí trên file PDF và xuất file đã ký.</p>
+        <span class="app-btn">Mở công cụ <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+      </a>
+
+      <a class="app-card" href="apps/ghep-nhieu-anh.html">
+        <div class="app-card-top">
+          <span class="app-icon" style="background:#e1edfb;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2f6fed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.4"></rect><path d="M4 15V6a2 2 0 0 1 2-2h9"></path></svg>
+          </span>
+          <svg class="app-illustration" viewBox="0 0 130 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="92" cy="52" r="36" fill="#dfeafb"/>
+            <rect x="16" y="10" width="66" height="52" rx="7" fill="#c8ddf7"/>
+            <rect x="26" y="22" width="66" height="52" rx="7" fill="#ffffff" stroke="#dbe9fb" stroke-width="1.5"/>
+            <circle cx="41" cy="37" r="5.5" fill="#f6c453"/>
+            <path d="M30 62l14-16 10 10 9-10 15 16z" fill="#7fa8e0"/>
+            <circle cx="101" cy="62" r="13" fill="#2f6fed"/>
+            <line x1="101" y1="56" x2="101" y2="68" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="95" y1="62" x2="107" y2="62" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2 class="app-title">Ghép nhiều ảnh</h2>
+        <p class="app-desc">Gộp nhiều ảnh thành một bố cục duy nhất, sắp xếp và xuất file ảnh ghép.</p>
+        <span class="app-btn">Mở công cụ <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.protocol === 'http:')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {
+        // Đăng ký service worker thất bại (ví dụ mở qua file://) — bỏ qua,
+        // app vẫn hoạt động bình thường không có PWA/offline.
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
